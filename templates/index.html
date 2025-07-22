@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alyda ChatBot</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #ffffff;
+      padding: 0;
+    }
+    h1{
+      margin-top: 200px;
+      text-align: center;
+      font-size: 50px;
+
+    }
+
+    .chat-container {
+      max-width: 1000px;
+      margin: 100px auto;
+      background: #fff397;
+      border-radius: 25px;
+      padding: 30px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .chat-box {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 15px;
+      background: #fafafa;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .bubble {
+      padding: 10px 14px;
+      border-radius: 20px;
+      margin: 10px 0;
+      display: inline-block;
+      max-width: 80%;
+      line-height: 1.4;
+    }
+
+    .bubble.user {
+      background-color: #efd2ff;
+      align-self: flex-end;
+      text-align: right;
+      float: right;
+      clear: both;
+    }
+
+    .bubble.bot {
+      background-color: #b9d0ff;
+      align-self: flex-start;
+      text-align: left;
+      float: left;
+      clear: both;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #eb78ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e44cff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Alyda Chat Bot!!!</h1>
+  <div class="chat-container">
+    <h2>Alyda ChatBot</h2>
+    <div class="pic1">
+      <img src="pic/Thanatcha shared a sketch with you-2.png" alt="">
+    </div>
+    <div id="chat-box" class="chat-box"></div>
+    <div class="input-area">
+      <input type="text" id="message" placeholder="Enter your message..." />
+      <button onclick="sendMessage()">sending</button>
+    </div>
+  </div>
+
+    <script>
+        async function sendMessage() {
+      const msg = document.getElementById("message").value;
+      if (!msg) return;
+
+      const chatBox = document.getElementById("chat-box");
+      chatBox.innerHTML += `<div class="bubble user">👤 ${msg}</div>`;
+      document.getElementById("message").value = "";
+
+      const res = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg })
+            });
+
+      const data = await res.json();
+      chatBox.innerHTML += `<div class="bubble bot">🤖 ${data.response}</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
